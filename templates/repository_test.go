@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/solrac97gr/go-start/templates"
+	"github.com/stretchr/testify/assert"
 )
 
 func Test_RepositoryTemplate(t *testing.T) {
@@ -12,12 +13,10 @@ func Test_RepositoryTemplate(t *testing.T) {
 type TestRepository struct {
 }
 
-func NewTestRepository() *TestRepository {
-	return &TestRepository{}
+func NewTestRepository() (*TestRepository, error) {
+	return &TestRepository{}, nil
 }
 `
 	result := templates.NewRepositoryTemplate("Test")
-	if result != expected {
-		t.Errorf("Expected %s, got %s", expected, result)
-	}
+	assert.Equal(t, expected, result)
 }

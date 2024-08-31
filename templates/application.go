@@ -16,10 +16,10 @@ type %sApp struct {
 	repository	ports.%sRepository
 }
 
-func New%sApp(repo ports.%sRepository) *%sApp {
+func New%sApp(repo ports.%sRepository) (*%sApp, error) {
 	return &%sApp{
 		repository: repo,
-	}
+	}, nil
 }
 `
 

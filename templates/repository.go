@@ -7,8 +7,8 @@ var RepositoryTemplate = `package respository
 type %sRepository struct {
 }
 
-func New%sRepository() *%sRepository {
-	return &%sRepository{}
+func New%sRepository() (*%sRepository, error) {
+	return &%sRepository{}, nil
 }
 `
 

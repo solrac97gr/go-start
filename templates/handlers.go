@@ -6,7 +6,7 @@ import (
 	"github.com/solrac97gr/go-start/utils"
 )
 
-var HandlersTemplate = `package handlers
+var HandlersTemplate = `package handler
 
 import (
 	"github.com/%s/%s/internal/%s/domain/ports"
@@ -16,8 +16,8 @@ type %sHandler struct {
 	application ports.%sAplication
 }
 
-func New%sHandler() *%sHandler {
-	return &%sHandler{}
+func New%sHandler() (*%sHandler, error) {
+	return &%sHandler{}, nil
 }
 `
 
