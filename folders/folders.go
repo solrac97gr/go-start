@@ -27,6 +27,11 @@ func (f *Folders) CreateFolder(route string) error {
 
 func (f *Folders) CreateFolderStructure(projectName string, subAppName []string) error {
 	var err error
+	err = f.CreateFolder(projectName)
+	if err != nil {
+		return err
+	}
+
 	err = f.CreateFolder(projectName + "/internal")
 	if err != nil {
 		return err
@@ -70,11 +75,19 @@ func (f *Folders) CreateFolderStructure(projectName string, subAppName []string)
 		if err != nil {
 			return err
 		}
+		err = f.CreateFolder(projectName + "/internal/" + route + "/domain/models")
+		if err != nil {
+			return err
+		}
 		err = f.CreateFolder(projectName + "/internal/" + route + "/domain/ports")
 		if err != nil {
 			return err
 		}
 		err = f.CreateFolder(projectName + "/internal/" + route + "/application")
+		if err != nil {
+			return err
+		}
+		err = f.CreateFolder(projectName + "/internal/" + route + "/infrastructure")
 		if err != nil {
 			return err
 		}
@@ -86,12 +99,10 @@ func (f *Folders) CreateFolderStructure(projectName string, subAppName []string)
 		if err != nil {
 			return err
 		}
-		err = f.CreateFolder(route)
+		err = f.CreateFolder(projectName + "/internal/" + route + "/infrastructure/server")
 		if err != nil {
 			return err
 		}
 	}
-
-	fmt.Println("Folder structure created successfully!")
 	return nil
 }
