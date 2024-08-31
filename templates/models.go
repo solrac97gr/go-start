@@ -1,6 +1,10 @@
 package templates
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/solrac97gr/go-start/utils"
+)
 
 var ModelsTemplate = `package models
 
@@ -13,5 +17,13 @@ func New%s() *%s {
 `
 
 func NewModelsTemplate(modelName string) string {
-	return fmt.Sprintf(ModelsTemplate, modelName, modelName, modelName, modelName)
+	modelName = utils.Capitalize(modelName)
+
+	return fmt.Sprintf(
+		ModelsTemplate,
+		modelName,
+		modelName,
+		modelName,
+		modelName,
+	)
 }

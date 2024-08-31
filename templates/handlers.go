@@ -1,11 +1,15 @@
 package templates
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/solrac97gr/go-start/utils"
+)
 
 var HandlersTemplate = `package handlers
 
 import (
-	"github.com/%s/%s/domain/ports"
+	"github.com/%s/%s/internal/%s/domain/ports"
 )
 
 type %sHandler struct {
@@ -18,5 +22,18 @@ func New%sHandler() *%sHandler {
 `
 
 func NewHandlersTemplate(githubUser, projectName, handlerName string) string {
-	return fmt.Sprintf(HandlersTemplate, githubUser, projectName, handlerName, handlerName, handlerName, handlerName, handlerName)
+	handlerName = utils.Capitalize(handlerName)
+	var lowerHandlerName = utils.Lowercase(handlerName)
+
+	return fmt.Sprintf(
+		HandlersTemplate,
+		githubUser,
+		projectName,
+		lowerHandlerName,
+		handlerName,
+		handlerName,
+		handlerName,
+		handlerName,
+		handlerName,
+	)
 }

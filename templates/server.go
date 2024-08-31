@@ -52,7 +52,22 @@ func (s *%sServer) Start(port string) error {
 `
 
 func NewServerTemplate(githubUser, projectName, serverName string) string {
-	var path = utils.Lowercase(serverName)
+	var entityLower = utils.Lowercase(serverName)
+	var entityCapitalized = utils.Capitalize(serverName)
 
-	return fmt.Sprintf(ServerTemplate, githubUser, projectName, serverName, path, serverName, serverName, serverName, serverName, serverName, serverName, serverName, serverName, serverName)
+	return fmt.Sprintf(ServerTemplate,
+		githubUser,
+		projectName,
+		entityCapitalized,
+		entityLower,
+		entityCapitalized,
+		entityCapitalized,
+		entityCapitalized,
+		entityCapitalized,
+		entityCapitalized,
+		entityCapitalized,
+		entityCapitalized,
+		entityCapitalized,
+		entityCapitalized,
+	)
 }

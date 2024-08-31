@@ -10,7 +10,7 @@ func Test_NewHandlersTemplate(t *testing.T) {
 	var expected = `package handlers
 
 import (
-	"github.com/user/project/domain/ports"
+	"github.com/user/project/internal/test/domain/ports"
 )
 
 type TestHandler struct {
