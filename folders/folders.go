@@ -65,6 +65,15 @@ func (f *Folders) CreateFolderStructure(projectName string, subAppName []string)
 		return err
 
 	}
+	err = f.CreateFolder(projectName + "/pkg/factory")
+	if err != nil {
+		return err
+	}
+	err = f.CreateFolder(projectName + "/pkg/server")
+	if err != nil {
+		return err
+	}
+
 	for _, route := range subAppName {
 		var err error
 		err = f.CreateFolder(projectName + "/internal/" + route)
