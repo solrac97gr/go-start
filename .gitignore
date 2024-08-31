@@ -1,0 +1,8 @@
+# Ignore bin directory
+**/bin
+
+# Ignore OS generated files
+.DS_Store
+
+# Ignore log files
+*.log
