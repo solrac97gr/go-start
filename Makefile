@@ -9,6 +9,9 @@ build:
 run:
 	./bin/$(PROJECT_NAME)
 
+test:
+	go test -v ./...
+
 clean:
 	rm -rf bin/$(PROJECT_NAME)
 	rm -rf bin

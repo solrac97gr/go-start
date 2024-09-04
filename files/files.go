@@ -3,6 +3,7 @@ package files
 import (
 	"os"
 
+	"github.com/solrac97gr/go-start/templates"
 	"github.com/solrac97gr/go-start/utils"
 )
 
@@ -19,16 +20,47 @@ func (f *Files) CreateFile(route string, content string) {
 	os.WriteFile(route, []byte(content), 0644)
 }
 
-func (f *Files) CreateFilesStructure(projectName string, subAppName []string) {
-	f.CreateFile(projectName+"/go.mod", "module "+projectName)
+func (f *Files) CreateFilesStructure(githubName string, projectName string, goVersion string, subAppName []string) {
+	f.CreateFile(projectName+"/go.mod", templates.NewGoModTemplate(githubName, projectName, goVersion))
+	f.CreateFile((projectName + "/cmd/http/main.go"), "package main")
 
 	for _, route := range subAppName {
 		route = utils.Lowercase(route)
 
-		f.CreateFile(projectName+"/internal/"+route+"/domain/"+route+".go", "")
-		f.CreateFile(projectName+"/internal/"+route+"/domain/ports/"+route+"_repository.go", "")
-		f.CreateFile(projectName+"/internal/"+route+"/application/"+route+"_service.go", "")
-		f.CreateFile(projectName+"/internal/"+route+"/infrastructure/repository/"+route+"_repository.go", "")
-		f.CreateFile(projectName+"/internal/"+route+"/infrastructure/handler/"+route+"_handler.go", "")
+		// Create models file
+		f.CreateFile(
+			projectName+"/internal/"+route+"/domain/models/"+route+".go",
+			templates.NewModelsTemplate(route),
+		)
+		// Create Ports file
+		f.CreateFile(
+			projectName+"/internal/"+route+"/domain/ports/"+route+"_repository.go",
+			templates.NewPortsTemplate(route),
+		)
+		// Create Application file
+		f.CreateFile(
+			projectName+"/internal/"+route+"/application/"+route+"_application.go",
+			templates.NewApplicationTemplate(githubName, projectName, route),
+		)
+		// Create Repository file
+		f.CreateFile(
+			projectName+"/internal/"+route+"/infrastructure/repository/"+route+"_repository.go",
+			templates.NewRepositoryTemplate(route),
+		)
+		// Create handler file
+		f.CreateFile(
+			projectName+"/internal/"+route+"/infrastructure/handler/"+route+"_handler.go",
+			templates.NewHandlersTemplate(githubName, projectName, route),
+		)
+		// Create Factory file
+		f.CreateFile(
+			projectName+"/pkg/factory/"+route+"_factory.go",
+			templates.NewFactoryTemplate(githubName, projectName, route),
+		)
+		// Create Server file
+		f.CreateFile(
+			projectName+"/internal/"+route+"/infrastructure/server/"+route+"_server.go",
+			templates.NewServerTemplate(githubName, projectName, route),
+		)
 	}
 }

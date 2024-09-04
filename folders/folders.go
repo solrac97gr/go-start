@@ -115,3 +115,10 @@ func (f *Folders) CreateFolderStructure(projectName string, subAppName []string)
 	}
 	return nil
 }
+
+func (f *Folders) RemoveFolder(route string) error {
+	if err := os.RemoveAll(route); err != nil {
+		return err
+	}
+	return nil
+}

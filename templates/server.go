@@ -9,9 +9,10 @@ import (
 var ServerTemplate = `package server
 
 import (
-	"github.com/%s/%s/internal/domain/ports"
+	"github.com/%s/%s/internal/%s/domain/ports"
 
 	"github.com/gofiber/fiber/v2"
+	"fmt"
 )
 
 const (
@@ -58,6 +59,7 @@ func NewServerTemplate(githubUser, projectName, serverName string) string {
 	return fmt.Sprintf(ServerTemplate,
 		githubUser,
 		projectName,
+		entityLower,
 		entityCapitalized,
 		entityLower,
 		entityCapitalized,

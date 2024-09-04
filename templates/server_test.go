@@ -11,9 +11,10 @@ func Test_NewServerTemplate(t *testing.T) {
 	var expected = `package server
 
 import (
-	"github.com/user/project/internal/domain/ports"
+	"github.com/user/project/internal/test/domain/ports"
 
 	"github.com/gofiber/fiber/v2"
+	"fmt"
 )
 
 const (

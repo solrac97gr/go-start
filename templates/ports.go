@@ -1,6 +1,10 @@
 package templates
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/solrac97gr/go-start/utils"
+)
 
 var PortsTemplate = `package ports
 
@@ -15,5 +19,7 @@ type %sHandler interface {
 `
 
 func NewPortsTemplate(name string) string {
-	return fmt.Sprintf(PortsTemplate, name, name, name)
+	lower := utils.Lowercase(name)
+	capitalized := utils.Capitalize(lower)
+	return fmt.Sprintf(PortsTemplate, capitalized, capitalized, capitalized)
 }
