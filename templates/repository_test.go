@@ -8,7 +8,7 @@ import (
 )
 
 func Test_RepositoryTemplate(t *testing.T) {
-	expected := `package respository
+	expected := `package repository
 
 type TestRepository struct {
 }
@@ -17,6 +17,6 @@ func NewTestRepository() (*TestRepository, error) {
 	return &TestRepository{}, nil
 }
 `
-	result := templates.NewRepositoryTemplate("Test")
+	result := templates.NewRepositoryTemplate("test")
 	assert.Equal(t, expected, result)
 }

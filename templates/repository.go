@@ -1,8 +1,12 @@
 package templates
 
-import "fmt"
+import (
+	"fmt"
 
-var RepositoryTemplate = `package respository
+	"github.com/solrac97gr/go-start/utils"
+)
+
+var RepositoryTemplate = `package repository
 
 type %sRepository struct {
 }
@@ -13,5 +17,7 @@ func New%sRepository() (*%sRepository, error) {
 `
 
 func NewRepositoryTemplate(repoName string) string {
-	return fmt.Sprintf(RepositoryTemplate, repoName, repoName, repoName, repoName)
+	lowerName := utils.Lowercase(repoName)
+	capitalizedName := utils.Capitalize(lowerName)
+	return fmt.Sprintf(RepositoryTemplate, capitalizedName, capitalizedName, capitalizedName, capitalizedName)
 }

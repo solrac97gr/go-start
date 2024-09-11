@@ -18,8 +18,10 @@ type TestHandler struct {
 	application ports.TestAplication
 }
 
-func NewTestHandler() (*TestHandler, error) {
-	return &TestHandler{}, nil
+func NewTestHandler(app ports.TestAplication) (*TestHandler, error) {
+	return &TestHandler{
+		application: app,
+	}, nil
 }
 `
 	var result = templates.NewHandlersTemplate("user", "project", "Test")

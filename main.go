@@ -59,9 +59,16 @@ func main() {
 	os.Chdir(projectName)
 	fmt.Println("Downloading dependencies 📥")
 	cmd := exec.Command("go", "mod", "download")
+	cmd2 := exec.Command("go", "mod", "tidy")
 	cmd.Stdout = os.Stdout
+	cmd2.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
+	cmd2.Stdout = os.Stdout
 	err = cmd.Run()
+	if err != nil {
+		panic(err)
+	}
+	err = cmd2.Run()
 	if err != nil {
 		panic(err)
 	}

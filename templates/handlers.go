@@ -16,8 +16,10 @@ type %sHandler struct {
 	application ports.%sAplication
 }
 
-func New%sHandler() (*%sHandler, error) {
-	return &%sHandler{}, nil
+func New%sHandler(app ports.%sAplication) (*%sHandler, error) {
+	return &%sHandler{
+		application: app,
+	}, nil
 }
 `
 
@@ -30,6 +32,7 @@ func NewHandlersTemplate(githubUser, projectName, handlerName string) string {
 		githubUser,
 		projectName,
 		lowerHandlerName,
+		handlerName,
 		handlerName,
 		handlerName,
 		handlerName,
