@@ -51,4 +51,4 @@ else
     echo -e "${RED}Warning: Application installed but might not be in PATH${NC}"
 fi
 
-echo -e "${GREEN}Installation complete!${NC}"
+echo -e "${GREEN}Installation complete!${NC} 🎊"

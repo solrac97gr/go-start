@@ -2,7 +2,9 @@ package templates
 
 var DockerComposeTemplate = `services:
   app:
-    build: ./infrastructure/docker/Dockerfile
+    build:
+      context: .
+      dockerfile: ./infrastructure/docker/Dockerfile
     ports:
       - "8080:8080"
     environment:
