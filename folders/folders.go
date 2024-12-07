@@ -44,14 +44,6 @@ func (f *Folders) CreateFolderStructure(projectName string, subAppName []string)
 	if err != nil {
 		return err
 	}
-	err = f.CreateFolder(projectName + "/configs")
-	if err != nil {
-		return err
-	}
-	err = f.CreateFolder(projectName + "/scripts")
-	if err != nil {
-		return err
-	}
 	err = f.CreateFolder(projectName + "/pkg")
 	if err != nil {
 		return err
