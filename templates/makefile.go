@@ -12,7 +12,7 @@ PROJECT_NAME=%s
 all: build
 
 build:
-	go build -o bin/$(PROJECT_NAME) main.go
+	go build -o bin/$(PROJECT_NAME) cmd/http/main.go
 
 run:
 	./bin/$(PROJECT_NAME)

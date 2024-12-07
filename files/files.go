@@ -28,6 +28,7 @@ func (f *Files) CreateFilesStructure(githubName string, projectName string, goVe
 	f.CreateFile(projectName+"/infrastructure/docker/Dockerfile", templates.NewDockerfileTemplate())
 	f.CreateFile(projectName+"/docker-compose.yaml", templates.NewDockerComposeTemplate())
 	f.CreateFile(projectName+"/.env.example", templates.NewEnvTemplate())
+	f.CreateFile(projectName+"./.gitignore", templates.NewGitIgnoreTemplate())
 
 	for _, route := range subAppName {
 		route = utils.Lowercase(route)
