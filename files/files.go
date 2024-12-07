@@ -24,6 +24,7 @@ func (f *Files) CreateFilesStructure(githubName string, projectName string, goVe
 	f.CreateFile(projectName+"/go.mod", templates.NewGoModTemplate(githubName, projectName, goVersion))
 	f.CreateFile((projectName + "/cmd/http/main.go"), templates.NewMainTemplate(githubName, projectName, subAppName))
 	f.CreateFile(projectName+"/pkg/server/super_server.go", templates.NewSuperServerTemplate(projectName))
+	f.CreateFile(projectName+"/Makefile", templates.NewMakefileTemplate(projectName))
 
 	for _, route := range subAppName {
 		route = utils.Lowercase(route)

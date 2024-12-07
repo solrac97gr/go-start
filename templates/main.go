@@ -20,7 +20,7 @@ func main() {
 %s
 	// Build Super server
 %s
-	//
+
 	srv := sserver.NewServer(subApps)
 	if err:=srv.Initialize("8080"); err != nil {
 		log.Panic(err)
