@@ -1,7 +1,9 @@
 package templates
 
+import "fmt"
+
 var DockerfileTemplate = `# Build stage
-FROM golang:1.23-alpine AS builder
+FROM golang:%s-alpine AS builder
 
 # Set working directory
 WORKDIR /app
@@ -32,6 +34,6 @@ COPY --from=builder /app/main .
 # Command to run the application
 CMD ["./main"]`
 
-func NewDockerfileTemplate() string {
-	return DockerfileTemplate
+func NewDockerfileTemplate(version string) string {
+	return fmt.Sprintf(DockerfileTemplate, version)
 }
