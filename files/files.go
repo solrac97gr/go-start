@@ -22,7 +22,7 @@ func (f *Files) CreateFile(route string, content string) {
 
 func (f *Files) CreateFilesStructure(githubName string, projectName string, goVersion string, subAppName []string) {
 	f.CreateFile(projectName+"/go.mod", templates.NewGoModTemplate(githubName, projectName, goVersion))
-	f.CreateFile((projectName + "/cmd/http/main.go"), "package main")
+	f.CreateFile((projectName + "/cmd/http/main.go"), templates.NewMainTemplate(githubName, projectName, subAppName))
 	f.CreateFile(projectName+"/pkg/server/super_server.go", templates.NewSuperServerTemplate(projectName))
 
 	for _, route := range subAppName {
