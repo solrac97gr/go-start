@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"runtime"
 	"strings"
 
 	"github.com/solrac97gr/go-start/files"
@@ -52,7 +53,9 @@ func main() {
 	}
 
 	fl := files.NewFiles()
-	fl.CreateFilesStructure(githubUsername, projectName, "1.19", subAppsNamesList)
+	majorMinor := strings.Split(strings.TrimPrefix(runtime.Version(), "go"), ".")
+	goVersion := majorMinor[0] + "." + majorMinor[1]
+	fl.CreateFilesStructure(githubUsername, projectName, goVersion, subAppsNamesList)
 	fmt.Println("Project structure created successfully")
 
 	After(projectName)
@@ -80,6 +83,7 @@ func After(projectName string) {
 	if err := cmdGoModTidy.Run(); err != nil {
 		panic(err)
 	}
+	fmt.Println("Initializing Repository 🛸")
 	if err := cmdGitInit.Run(); err != nil {
 		panic(err)
 	}
