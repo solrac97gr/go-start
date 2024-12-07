@@ -55,21 +55,32 @@ func main() {
 	fl.CreateFilesStructure(githubUsername, projectName, "1.19", subAppsNamesList)
 	fmt.Println("Project structure created successfully")
 
+	After(projectName)
+}
+
+func After(projectName string) {
 	// Execute the go mod download
 	os.Chdir(projectName)
 	fmt.Println("Downloading dependencies 📥")
-	cmd := exec.Command("go", "mod", "download")
-	cmd2 := exec.Command("go", "mod", "tidy")
-	cmd.Stdout = os.Stdout
-	cmd2.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	cmd2.Stdout = os.Stdout
-	err = cmd.Run()
-	if err != nil {
+	cmdGoModDownload := exec.Command("go", "mod", "download")
+	cmdGoModTidy := exec.Command("go", "mod", "tidy")
+	cmdGitInit := exec.Command("git", "init")
+
+	cmdGoModDownload.Stdout = os.Stdout
+	cmdGoModTidy.Stdout = os.Stdout
+	cmdGitInit.Stdout = os.Stdout
+
+	cmdGoModDownload.Stderr = os.Stderr
+	cmdGoModTidy.Stderr = os.Stderr
+	cmdGitInit.Stderr = os.Stderr
+
+	if err := cmdGoModDownload.Run(); err != nil {
 		panic(err)
 	}
-	err = cmd2.Run()
-	if err != nil {
+	if err := cmdGoModTidy.Run(); err != nil {
+		panic(err)
+	}
+	if err := cmdGitInit.Run(); err != nil {
 		panic(err)
 	}
 
