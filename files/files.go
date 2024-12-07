@@ -25,6 +25,9 @@ func (f *Files) CreateFilesStructure(githubName string, projectName string, goVe
 	f.CreateFile((projectName + "/cmd/http/main.go"), templates.NewMainTemplate(githubName, projectName, subAppName))
 	f.CreateFile(projectName+"/pkg/server/super_server.go", templates.NewSuperServerTemplate(projectName))
 	f.CreateFile(projectName+"/Makefile", templates.NewMakefileTemplate(projectName))
+	f.CreateFile(projectName+"/infrastructure/docker/Dockerfile", templates.NewDockerfileTemplate())
+	f.CreateFile(projectName+"/docker-compose.yaml", templates.NewDockerComposeTemplate())
+	f.CreateFile(projectName+"/.env.example", templates.NewEnvTemplate())
 
 	for _, route := range subAppName {
 		route = utils.Lowercase(route)
