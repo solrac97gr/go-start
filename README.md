@@ -31,6 +31,7 @@ bash scripts/install.sh
 
 ## Usage Guide 📚
 
+### Start a project 🚀
 1. Navigate to your desired project location and run:
 ```bash
 go-start
@@ -42,6 +43,25 @@ go-start
    - List your project entities, separated by commas (e.g., `product,user,payment`)
 
 3. Start your application:
+```bash
+# Using Make
+make run
+
+# Using Docker
+docker-compose up --build
+```
+### Add new app to the project 🚀
+1. Navigate inside of your current project:
+```bash
+go-start --flow=app
+```
+
+2. Follow the interactive prompts:
+   - Enter app name (e.g., `tag`)
+
+3. Verify that the app was correctly integrated in the main
+
+4. Start your application:
 ```bash
 # Using Make
 make run
