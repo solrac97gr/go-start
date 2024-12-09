@@ -84,7 +84,7 @@ func (f *FilesService) CreateFilesStructure(githubName string, projectName strin
 
 		go func(appName string) {
 			defer wg.Done()
-			if err := f.createApp(githubName, projectName, appName); err != nil {
+			if err := f.CreateApp(githubName, projectName, appName); err != nil {
 				errChan <- err
 			}
 		}(appName)
@@ -106,8 +106,8 @@ func (f *FilesService) CreateFilesStructure(githubName string, projectName strin
 	return nil
 }
 
-// createApp create the app files
-func (f *FilesService) createApp(githubName, projectName, appName string) error {
+// CreateApp create the app files
+func (f *FilesService) CreateApp(githubName, projectName, appName string) error {
 	for name, file := range f.appFiles {
 		var fullPath string
 		fullPath = fmt.Sprintf("%s/"+file.path, projectName, appName, appName)
