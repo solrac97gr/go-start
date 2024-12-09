@@ -5,22 +5,22 @@ import (
 	"os"
 )
 
-type Folders struct {
+type FoldersService struct {
 	projectFolders []string
 	appFolders     []string
 }
 
 // NewFolderService create a new folder service
-func NewFolderService() *Folders {
+func NewFolderService() *FoldersService {
 	projectFolders, appFolders := initializeFolders()
-	return &Folders{
+	return &FoldersService{
 		projectFolders: projectFolders,
 		appFolders:     appFolders,
 	}
 }
 
 // CreateFolderStructure create the folder structure necessary for the project
-func (f *Folders) CreateFolderStructure(projectName string, subAppName []string) error {
+func (f *FoldersService) CreateFolderStructure(projectName string, subAppName []string) error {
 	// Create the project principal folder
 	if err := f.createPrincipalFolders(projectName); err != nil {
 		return err
@@ -28,7 +28,7 @@ func (f *Folders) CreateFolderStructure(projectName string, subAppName []string)
 
 	// Create the subapp folders
 	for _, route := range subAppName {
-		if err := f.createAppsFolders(projectName, route); err != nil {
+		if err := f.CreateAppsFolders(projectName, route); err != nil {
 			return err
 		}
 	}
@@ -36,7 +36,7 @@ func (f *Folders) CreateFolderStructure(projectName string, subAppName []string)
 }
 
 // createPrincipalFolders create the folders of the root of the project
-func (f *Folders) createPrincipalFolders(projectName string) error {
+func (f *FoldersService) createPrincipalFolders(projectName string) error {
 	// Create the project folders
 	for _, folder := range f.projectFolders {
 		if err := f.CreateFolder(projectName + folder); err != nil {
@@ -46,10 +46,10 @@ func (f *Folders) createPrincipalFolders(projectName string) error {
 	return nil
 }
 
-// createAppsFolders create the folders of an app
-func (f *Folders) createAppsFolders(projectName string, route string) error {
+// CreateAppsFolders create the folders of an app
+func (f *FoldersService) CreateAppsFolders(projectName string, appName string) error {
 	for _, folder := range f.appFolders {
-		if err := f.CreateFolder(f.buildAppRoutePath(projectName, route) + folder); err != nil {
+		if err := f.CreateFolder(f.buildAppRoutePath(projectName, appName) + folder); err != nil {
 			return err
 		}
 	}
@@ -57,12 +57,12 @@ func (f *Folders) createAppsFolders(projectName string, route string) error {
 }
 
 // buildAppRoutePath Build the route of the App
-func (f *Folders) buildAppRoutePath(projectName string, route string) string {
+func (f *FoldersService) buildAppRoutePath(projectName string, route string) string {
 	return fmt.Sprintf("%s/internal/%s", projectName, route)
 }
 
 // Create a folder if it does not exist
-func (f *Folders) CreateFolder(route string) error {
+func (f *FoldersService) CreateFolder(route string) error {
 	if err := os.Mkdir(route, 0755); err != nil {
 		if os.IsExist(err) {
 			fmt.Println("Folder already exists: ", route)
@@ -75,7 +75,7 @@ func (f *Folders) CreateFolder(route string) error {
 }
 
 // RemoveFolder delete folder
-func (f *Folders) RemoveFolder(route string) error {
+func (f *FoldersService) RemoveFolder(route string) error {
 	if err := os.RemoveAll(route); err != nil {
 		return err
 	}

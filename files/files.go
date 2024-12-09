@@ -3,6 +3,7 @@ package files
 import (
 	"fmt"
 	"os"
+	"sync"
 
 	"github.com/solrac97gr/go-start/templates"
 	"github.com/solrac97gr/go-start/utils"
@@ -43,7 +44,7 @@ func NewFilesService() *FilesService {
 	}
 }
 
-// CreateFilesStructure create the files of the project
+// CreateFilesStructure creates the files of the project
 func (f *FilesService) CreateFilesStructure(githubName string, projectName string, goVersion string, subAppName []string) error {
 	templateGenerator := &TemplateGeneratorParams{
 		githubUser:  githubName,
@@ -51,27 +52,62 @@ func (f *FilesService) CreateFilesStructure(githubName string, projectName strin
 		goVersion:   goVersion,
 		subAppName:  subAppName,
 	}
-	// Iterate throw the map of file map and generate it with their respective content
+
+	// Initialize WaitGroup
+	var wg sync.WaitGroup
+	errChan := make(chan error, 1) // Buffered to avoid blocking
+
+	// Iterate through the map of project files and generate them
 	for file, generateContent := range f.projectFiles {
-		if err := f.CreateFile(
-			projectName+file,
-			generateContent(templateGenerator),
-		); err != nil {
-			return err
-		}
+		wg.Add(1)
+		// 	Problem: Loop variables are reused, causing all goroutines to share the same variables.
+		//	Solution: Capture the loop variables into new variables local to the current iteration.
+		//	Result: Each goroutine has its own copy of the variables, ensuring correct behavior.
+		file := file
+		generateContent := generateContent
+
+		go func(file string, generateContent func(*TemplateGeneratorParams) string) {
+			defer wg.Done()
+			content := generateContent(templateGenerator)
+			if err := f.CreateFile(projectName+file, content); err != nil {
+				errChan <- err
+			}
+		}(file, generateContent)
 	}
-	// Iterate throw the array of sub apps and generate their files
+
+	// Iterate through the array of sub apps and generate their files
 	for _, appName := range subAppName {
-		appName = utils.Lowercase(appName)
-		if err := f.createApp(githubName, projectName, appName); err != nil {
+		wg.Add(1)
+
+		// Capture the current loop variable to avoid closure issues
+		appName := utils.Lowercase(appName)
+
+		go func(appName string) {
+			defer wg.Done()
+			if err := f.CreateApp(githubName, projectName, appName); err != nil {
+				errChan <- err
+			}
+		}(appName)
+	}
+
+	// Wait for all goroutines to finish
+	go func() {
+		wg.Wait()
+		close(errChan)
+	}()
+
+	// Check for errors
+	for err := range errChan {
+		if err != nil {
 			return err
 		}
 	}
+
 	return nil
 }
 
-// createApp create the app files
-func (f *FilesService) createApp(githubName, projectName, appName string) error {
+// CreateApp create the app files
+func (f *FilesService) CreateApp(githubName, projectName, appName string) error {
 	for name, file := range f.appFiles {
 		var fullPath string
 		fullPath = fmt.Sprintf("%s/"+file.path, projectName, appName, appName)
