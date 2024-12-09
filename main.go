@@ -45,17 +45,18 @@ func main() {
 	// Print the list of subAppsNamesList
 	fmt.Println("SubApps Names: ", subAppsNamesList)
 
-	fd := folders.NewFolders()
-	err := fd.CreateFolderStructure(projectName, subAppsNamesList)
-	if err != nil {
+	fd := folders.NewFolderService()
+	if err := fd.CreateFolderStructure(projectName, subAppsNamesList); err != nil {
 		fd.RemoveFolder(projectName)
 		panic(err)
 	}
 
-	fl := files.NewFiles()
+	fl := files.NewFilesService()
 	majorMinor := strings.Split(strings.TrimPrefix(runtime.Version(), "go"), ".")
 	goVersion := majorMinor[0] + "." + majorMinor[1]
-	fl.CreateFilesStructure(githubUsername, projectName, goVersion, subAppsNamesList)
+	if err := fl.CreateFilesStructure(githubUsername, projectName, goVersion, subAppsNamesList); err != nil {
+		panic(err)
+	}
 	fmt.Println("Project structure created successfully")
 
 	After(projectName)
