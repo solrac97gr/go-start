@@ -33,45 +33,8 @@ func flow(flow string, fd *folders.FoldersService, fl *files.FilesService, gn *g
 	case "default":
 		defaultFlow(fd, fl)
 	case "app":
-		var appName string
-		fmt.Println("Enter the app name 📁: ")
-		fmt.Scanln(&appName)
-		if appName == "" {
-			panic("Project name cannot be empty")
-		}
-		if err := gn.GenerateNewApp(utils.Lowercase(appName)); err != nil {
-			panic(err)
-		}
+		addAppFlow(gn)
 	}
-}
-
-func after(projectName string) {
-	// Execute the go mod download
-	os.Chdir(projectName)
-	fmt.Println("Downloading dependencies 📥")
-	cmdGoModDownload := exec.Command("go", "mod", "download")
-	cmdGoModTidy := exec.Command("go", "mod", "tidy")
-	cmdGitInit := exec.Command("git", "init")
-
-	cmdGoModDownload.Stdout = os.Stdout
-	cmdGoModTidy.Stdout = os.Stdout
-	cmdGitInit.Stdout = os.Stdout
-
-	cmdGoModDownload.Stderr = os.Stderr
-	cmdGoModTidy.Stderr = os.Stderr
-	cmdGitInit.Stderr = os.Stderr
-
-	if err := cmdGoModDownload.Run(); err != nil {
-		panic(err)
-	}
-	if err := cmdGoModTidy.Run(); err != nil {
-		panic(err)
-	}
-	fmt.Println("Initializing Repository 🛸")
-	if err := cmdGitInit.Run(); err != nil {
-		panic(err)
-	}
-
 }
 
 func defaultFlow(fd *folders.FoldersService, fl *files.FilesService) {
@@ -119,6 +82,41 @@ func defaultFlow(fd *folders.FoldersService, fl *files.FilesService) {
 		panic(err)
 	}
 	fmt.Println("Project structure created successfully")
+	// Execute the go mod download
+	os.Chdir(projectName)
+	fmt.Println("Downloading dependencies 📥")
+	cmdGoModDownload := exec.Command("go", "mod", "download")
+	cmdGoModTidy := exec.Command("go", "mod", "tidy")
+	cmdGitInit := exec.Command("git", "init")
 
-	after(projectName)
+	cmdGoModDownload.Stdout = os.Stdout
+	cmdGoModTidy.Stdout = os.Stdout
+	cmdGitInit.Stdout = os.Stdout
+
+	cmdGoModDownload.Stderr = os.Stderr
+	cmdGoModTidy.Stderr = os.Stderr
+	cmdGitInit.Stderr = os.Stderr
+
+	if err := cmdGoModDownload.Run(); err != nil {
+		panic(err)
+	}
+	if err := cmdGoModTidy.Run(); err != nil {
+		panic(err)
+	}
+	fmt.Println("Initializing Repository 🛸")
+	if err := cmdGitInit.Run(); err != nil {
+		panic(err)
+	}
+}
+
+func addAppFlow(gn *generator.GeneratorService) {
+	var appName string
+	fmt.Println("Enter the app name 📁: ")
+	fmt.Scanln(&appName)
+	if appName == "" {
+		panic("app name cannot be empty")
+	}
+	if err := gn.GenerateNewApp(utils.Lowercase(appName)); err != nil {
+		panic(err)
+	}
 }
