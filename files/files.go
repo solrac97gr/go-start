@@ -135,7 +135,7 @@ func initializeAppFiles() map[string]fileConfig {
 			},
 		},
 		"ports": {
-			path: "internal/%s/domain/ports/%s_repository.go",
+			path: "internal/%s/domain/ports/%s.go",
 			template: func(githubName, projectName, appName string) string {
 				return templates.NewPortsTemplate(appName)
 			},
