@@ -6,10 +6,59 @@ import (
 )
 
 type Folders struct {
+	projectFolders []string
+	appFolders     []string
 }
 
-func NewFolders() *Folders {
-	return &Folders{}
+// NewFolderService create a new folder service
+func NewFolderService() *Folders {
+	projectFolders, appFolders := initializeFolders()
+	return &Folders{
+		projectFolders: projectFolders,
+		appFolders:     appFolders,
+	}
+}
+
+// CreateFolderStructure create the folder structure necessary for the project
+func (f *Folders) CreateFolderStructure(projectName string, subAppName []string) error {
+	// Create the project principal folder
+	if err := f.createPrincipalFolders(projectName); err != nil {
+		return err
+	}
+
+	// Create the subapp folders
+	for _, route := range subAppName {
+		if err := f.createAppsFolders(projectName, route); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// createPrincipalFolders create the folders of the root of the project
+func (f *Folders) createPrincipalFolders(projectName string) error {
+	// Create the project folders
+	for _, folder := range f.projectFolders {
+		if err := f.CreateFolder(projectName + folder); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// createAppsFolders create the folders of an app
+func (f *Folders) createAppsFolders(projectName string, route string) error {
+	for _, folder := range f.appFolders {
+		if err := f.CreateFolder(f.buildAppRoutePath(projectName, route) + folder); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// buildAppRoutePath Build the route of the App
+func (f *Folders) buildAppRoutePath(projectName string, route string) string {
+	return fmt.Sprintf("%s/internal/%s", projectName, route)
 }
 
 // Create a folder if it does not exist
@@ -25,92 +74,35 @@ func (f *Folders) CreateFolder(route string) error {
 	return nil
 }
 
-func (f *Folders) CreateFolderStructure(projectName string, subAppName []string) error {
-	var err error
-	err = f.CreateFolder(projectName)
-	if err != nil {
-		return err
-	}
-
-	err = f.CreateFolder(projectName + "/internal")
-	if err != nil {
-		return err
-	}
-	err = f.CreateFolder(projectName + "/cmd")
-	if err != nil {
-		return err
-	}
-	err = f.CreateFolder(projectName + "/cmd/http")
-	if err != nil {
-		return err
-	}
-	err = f.CreateFolder(projectName + "/pkg")
-	if err != nil {
-		return err
-	}
-	err = f.CreateFolder(projectName + "/infrastructure")
-	if err != nil {
-		return err
-	}
-	err = f.CreateFolder(projectName + "/infrastructure/docker")
-	if err != nil {
-		return err
-
-	}
-	err = f.CreateFolder(projectName + "/pkg/factory")
-	if err != nil {
-		return err
-	}
-	err = f.CreateFolder(projectName + "/pkg/server")
-	if err != nil {
-		return err
-	}
-
-	for _, route := range subAppName {
-		var err error
-		err = f.CreateFolder(projectName + "/internal/" + route)
-		if err != nil {
-			return err
-		}
-		err = f.CreateFolder(projectName + "/internal/" + route + "/domain")
-		if err != nil {
-			return err
-		}
-		err = f.CreateFolder(projectName + "/internal/" + route + "/domain/models")
-		if err != nil {
-			return err
-		}
-		err = f.CreateFolder(projectName + "/internal/" + route + "/domain/ports")
-		if err != nil {
-			return err
-		}
-		err = f.CreateFolder(projectName + "/internal/" + route + "/application")
-		if err != nil {
-			return err
-		}
-		err = f.CreateFolder(projectName + "/internal/" + route + "/infrastructure")
-		if err != nil {
-			return err
-		}
-		err = f.CreateFolder(projectName + "/internal/" + route + "/infrastructure/repository")
-		if err != nil {
-			return err
-		}
-		err = f.CreateFolder(projectName + "/internal/" + route + "/infrastructure/handler")
-		if err != nil {
-			return err
-		}
-		err = f.CreateFolder(projectName + "/internal/" + route + "/infrastructure/server")
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
+// RemoveFolder delete folder
 func (f *Folders) RemoveFolder(route string) error {
 	if err := os.RemoveAll(route); err != nil {
 		return err
 	}
 	return nil
+}
+
+func initializeFolders() (projectFolders []string, appFolders []string) {
+	return []string{
+			"/", // for create the container folder
+			"/internal",
+			"/cmd",
+			"/cmd/http",
+			"/pkg",
+			"/pkg/factory",
+			"/pkg/server",
+			"/infrastructure",
+			"/infrastructure/docker",
+		},
+		[]string{
+			"/", // for create the container folder
+			"/domain",
+			"/domain/models",
+			"/domain/ports",
+			"/application",
+			"/infrastructure",
+			"/infrastructure/repository",
+			"/infrastructure/handler",
+			"/infrastructure/server",
+		}
 }
