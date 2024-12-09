@@ -54,7 +54,6 @@ docker-compose up --build
 The generated project follows clean architecture principles with the following structure:
 ```
 your-project/
-your-project/
 ├── cmd/
 │   └── http/
 │       └── main.go
